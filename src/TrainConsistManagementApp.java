@@ -4,43 +4,38 @@ public class TrainConsistManagementApp {
 
     public static void main(String[] args) {
 
-        // 🔹 Bogie IDs (can be unsorted initially)
-        String[] bogieIds = {"BG309", "BG101", "BG550", "BG205", "BG412"};
+        // 🔹 Bogie IDs (try empty array to test exception)
+        String[] bogieIds = {};
 
-        // 🔹 Sort first (IMPORTANT for Binary Search)
-        Arrays.sort(bogieIds);
-
-        // 🔹 Input search key
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter Bogie ID to search: ");
         String key = sc.nextLine();
 
-        int low = 0;
-        int high = bogieIds.length - 1;
-        boolean found = false;
-
-        // 🔹 Binary Search
-        while (low <= high) {
-
-            int mid = (low + high) / 2;
-
-            int result = bogieIds[mid].compareTo(key);
-
-            if (result == 0) {
-                found = true;
-                break;
-            } else if (result < 0) {
-                low = mid + 1;   // search right
-            } else {
-                high = mid - 1;  // search left
+        try {
+            // 🔹 Fail-fast check
+            if (bogieIds.length == 0) {
+                throw new IllegalStateException("No bogies available for search!");
             }
-        }
 
-        // 🔹 Output
-        if (found) {
-            System.out.println("Bogie ID found ✅");
-        } else {
-            System.out.println("Bogie ID not found ❌");
+            // 🔹 Linear Search (can also use Binary if sorted)
+            boolean found = false;
+
+            for (String id : bogieIds) {
+                if (id.equals(key)) {
+                    found = true;
+                    break;
+                }
+            }
+
+            // 🔹 Result
+            if (found) {
+                System.out.println("Bogie ID found ✅");
+            } else {
+                System.out.println("Bogie ID not found ❌");
+            }
+
+        } catch (IllegalStateException e) {
+            System.out.println("Error: " + e.getMessage());
         }
 
         sc.close();
