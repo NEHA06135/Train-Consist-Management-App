@@ -1,26 +1,38 @@
-// 🔹 Custom Exception Class
-class InvalidCapacityException extends Exception {
-    public InvalidCapacityException(String message) {
+// 🔹 Custom Runtime Exception
+class CargoSafetyException extends RuntimeException {
+    public CargoSafetyException(String message) {
         super(message);
     }
 }
 
-// 🔹 Bogie Class
-class Bogie {
-    String name;
-    int capacity;
+// 🔹 Goods Bogie Class
+class GoodsBogie {
+    String type;
+    String cargo;
 
-    // Constructor with validation
-    public Bogie(String name, int capacity) throws InvalidCapacityException {
-        if (capacity <= 0) {
-            throw new InvalidCapacityException("Capacity must be greater than zero");
-        }
-        this.name = name;
-        this.capacity = capacity;
+    public GoodsBogie(String type) {
+        this.type = type;
     }
 
-    public void display() {
-        System.out.println(name + " - Capacity: " + capacity);
+    // 🔹 Method to assign cargo safely
+    public void assignCargo(String cargo) {
+
+        try {
+            // ❌ Unsafe condition
+            if (type.equals("Rectangular") && cargo.equals("Petroleum")) {
+                throw new CargoSafetyException("Unsafe: Rectangular bogie cannot carry Petroleum");
+            }
+
+            // ✅ Safe assignment
+            this.cargo = cargo;
+            System.out.println("Cargo assigned successfully: " + cargo);
+
+        } catch (CargoSafetyException e) {
+            System.out.println("Error: " + e.getMessage());
+
+        } finally {
+            System.out.println("Cargo assignment attempt completed.\n");
+        }
     }
 }
 
@@ -29,19 +41,17 @@ public class TrainConsistManagementApp {
 
     public static void main(String[] args) {
 
-        try {
-            // ✅ Valid bogie
-            Bogie b1 = new Bogie("Sleeper", 72);
-            b1.display();
+        // 🔹 Create bogies
+        GoodsBogie b1 = new GoodsBogie("Cylindrical");
+        GoodsBogie b2 = new GoodsBogie("Rectangular");
 
-            // ❌ Invalid bogie
-            Bogie b2 = new Bogie("AC Chair", -10);
-            b2.display(); // will not execute
+        // 🔹 Safe case
+        b1.assignCargo("Petroleum");
 
-        } catch (InvalidCapacityException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+        // 🔹 Unsafe case
+        b2.assignCargo("Petroleum");
 
+        // 🔹 Program continues
         System.out.println("Program continues safely...");
     }
 }
