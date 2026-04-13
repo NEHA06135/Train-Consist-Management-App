@@ -1,57 +1,40 @@
-// 🔹 Custom Runtime Exception
-class CargoSafetyException extends RuntimeException {
-    public CargoSafetyException(String message) {
-        super(message);
-    }
-}
-
-// 🔹 Goods Bogie Class
-class GoodsBogie {
-    String type;
-    String cargo;
-
-    public GoodsBogie(String type) {
-        this.type = type;
-    }
-
-    // 🔹 Method to assign cargo safely
-    public void assignCargo(String cargo) {
-
-        try {
-            // ❌ Unsafe condition
-            if (type.equals("Rectangular") && cargo.equals("Petroleum")) {
-                throw new CargoSafetyException("Unsafe: Rectangular bogie cannot carry Petroleum");
-            }
-
-            // ✅ Safe assignment
-            this.cargo = cargo;
-            System.out.println("Cargo assigned successfully: " + cargo);
-
-        } catch (CargoSafetyException e) {
-            System.out.println("Error: " + e.getMessage());
-
-        } finally {
-            System.out.println("Cargo assignment attempt completed.\n");
-        }
-    }
-}
-
-// 🔹 Main Class
 public class TrainConsistManagementApp {
 
     public static void main(String[] args) {
 
-        // 🔹 Create bogies
-        GoodsBogie b1 = new GoodsBogie("Cylindrical");
-        GoodsBogie b2 = new GoodsBogie("Rectangular");
+        // 🔹 Passenger bogie capacities
+        int[] capacities = {72, 56, 24, 70, 60};
 
-        // 🔹 Safe case
-        b1.assignCargo("Petroleum");
+        int n = capacities.length;
 
-        // 🔹 Unsafe case
-        b2.assignCargo("Petroleum");
+        // 🔹 Bubble Sort
+        for (int i = 0; i < n - 1; i++) {
 
-        // 🔹 Program continues
-        System.out.println("Program continues safely...");
+            // Optimization (optional)
+            boolean swapped = false;
+
+            for (int j = 0; j < n - i - 1; j++) {
+
+                // Compare adjacent elements
+                if (capacities[j] > capacities[j + 1]) {
+
+                    // Swap
+                    int temp = capacities[j];
+                    capacities[j] = capacities[j + 1];
+                    capacities[j + 1] = temp;
+
+                    swapped = true;
+                }
+            }
+
+            // If no swaps → already sorted
+            if (!swapped) break;
+        }
+
+        // 🔹 Display sorted array
+        System.out.println("Sorted Capacities:");
+        for (int c : capacities) {
+            System.out.print(c + " ");
+        }
     }
 }
