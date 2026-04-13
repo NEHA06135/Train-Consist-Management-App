@@ -19,23 +19,28 @@ public class TrainConsistManagementApp {
 
     public static void main(String[] args) {
 
-        // 🔹 Original Bogie List (same as UC7)
+        // 🔹 Create Bogie List
         List<Bogie> bogies = new ArrayList<>();
 
         bogies.add(new Bogie("Sleeper", 72));
         bogies.add(new Bogie("AC Chair", 56));
+        bogies.add(new Bogie("Sleeper", 70));
         bogies.add(new Bogie("First Class", 24));
-        bogies.add(new Bogie("Luxury Coach", 80));
+        bogies.add(new Bogie("AC Chair", 60));
 
-        // 🔹 Stream Filtering (capacity > 60)
-        List<Bogie> filteredBogies = bogies.stream()
-                .filter(b -> b.capacity > 60)
-                .collect(Collectors.toList());
+        // 🔹 Grouping using Stream API
+        Map<String, List<Bogie>> groupedBogies =
+                bogies.stream()
+                      .collect(Collectors.groupingBy(b -> b.name));
 
-        // 🔹 Display filtered bogies
-        System.out.println("Bogies with capacity > 60:");
-        for (Bogie b : filteredBogies) {
-            b.display();
+        // 🔹 Display grouped result
+        System.out.println("Grouped Bogies:");
+
+        for (String key : groupedBogies.keySet()) {
+            System.out.println("\n" + key + ":");
+            for (Bogie b : groupedBogies.get(key)) {
+                b.display();
+            }
         }
     }
 }
